@@ -1,0 +1,67 @@
+<.header>
+  <%= @server.name %>
+  <:subtitle><%= @server.description %></:subtitle>
+  <:actions>
+    <.link patch={~p"/servers/#{@server}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit server</.button>
+    </.link>
+  </:actions>
+</.header>
+<.back navigate={~p"/servers"}>Back to servers</.back>
+
+<div class="w-full px-5 mt-3 flex flex-col justify-between border-2 rounded-md bg-white">
+  <div class="flex flex-col mt-5" id="messages" phx-update="stream">
+    <div :for={{message_id, message} <- @streams.messages} id={message_id}>
+      <div :if={message.user_id == @current_user.id}>
+        <div class="flex justify-end">
+          <p class="text-sm font-light">
+            <%= message.user.username %> - <%= Timex.from_now(message.updated_at) %>
+          </p>
+        </div>
+        <div class="flex justify-end mb-4">
+          <div class="mr-2 py-3 px-4 bg-blue-400 rounded-bl-2xl rounded-tl-2xl rounded-tr-2xl text-white">
+            <%= message.context %>
+          </div>
+        </div>
+      </div>
+      <div :if={message.user_id != @current_user.id}>
+        <div class="flex justify-start">
+          <p class="text-sm font-light">
+            <%= message.user.username %> - <%= Timex.from_now(message.updated_at) %>
+          </p>
+        </div>
+        <div class="flex justify-start mb-4">
+          <div class="ml-2 py-3 px-4 bg-gray-400 rounded-br-2xl rounded-tr-2xl rounded-tl-2xl text-white">
+            <%= message.context %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr class="mt-4" />
+  <div>
+    <.live_component
+      module={DiscordiaWeb.ServerLive.MessageComponent}
+      id={:new}
+      server={@server}
+      current_user={@current_user}
+      patch={~p"/servers/#{@server}"}
+    />
+  </div>
+</div>
+
+<.modal
+  :if={@live_action == :edit}
+  id="server-modal"
+  show
+  on_cancel={JS.patch(~p"/servers/#{@server}")}
+>
+  <.live_component
+    module={DiscordiaWeb.ServerLive.FormComponent}
+    id={@server.id}
+    title={@page_title}
+    action={@live_action}
+    server={@server}
+    patch={~p"/servers/#{@server}"}
+  />
+</.modal>
