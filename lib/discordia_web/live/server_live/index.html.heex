@@ -1,74 +1,75 @@
-<aside
-  id="default-sidebar"
-  class="fixed top-0 left-0 z-40 w-120 h-screen border-2 border-transparent border-r-white transition-transform -translate-x-full sm:translate-x-0"
-  aria-label="Sidebar"
->
-  <div class="h-full px-3 py-4 overflow-y-auto">
-    <.header>
-      Servers
-      <:actions>
-        <.link patch={~p"/servers/new"}>
-          <.button>New Server</.button>
-        </.link>
-      </:actions>
-    </.header>
+<div class="w-full flex flex-col sm:flex-row flex-grow overflow-hidden">
+    <div class="sm:w-1/3 md:1/4 w-full flex-shrink flex-grow-0 p-4">
+        <div class="sticky top-0 p-4 w-full">
+            <ul class="flex sm:flex-col overflow-hidden content-center justify-between">
+                <.header>
+                  Servers
+                  <:actions>
+                    <.link patch={~p"/servers/new"}>
+                      <.button>New Server</.button>
+                    </.link>
+                  </:actions>
+                </.header>
+            </ul>
+            <hr class="mt-3 mb-3" />
 
-    <hr class="mt-3 mb-3" />
-
-    <.table
-      id="servers"
-      rows={@streams.servers}
-      row_click={fn {_id, server} -> JS.navigate(~p"/servers/#{server}") end}
-    >
-      <:col :let={{_id, server}}><%= server.name %></:col>
-      <:action :let={{_id, server}}>
-        <div class="sr-only">
-          <.link navigate={~p"/servers/#{server}"}>Show</.link>
+            <.table
+              id="servers"
+              rows={@streams.servers}
+              row_click={fn {_id, server} -> JS.navigate(~p"/servers/#{server}") end}
+            >
+              <:col :let={{_id, server}}><%= server.name %></:col>
+              <:action :let={{_id, server}}>
+                <div class="sr-only">
+                  <.link navigate={~p"/servers/#{server}"}>Show</.link>
+                </div>
+                <.link patch={~p"/servers/#{server}/edit"}>Edit</.link>
+              </:action>
+              <:action :let={{id, server}}>
+                <.link
+                  phx-click={JS.push("delete", value: %{id: server.id}) |> hide("##{id}")}
+                  data-confirm="Are you sure?"
+                >
+                  Delete
+                </.link>
+              </:action>
+            </.table>
         </div>
-        <.link patch={~p"/servers/#{server}/edit"}>Edit</.link>
-      </:action>
-      <:action :let={{id, server}}>
-        <.link
-          phx-click={JS.push("delete", value: %{id: server.id}) |> hide("##{id}")}
-          data-confirm="Are you sure?"
-        >
-          Delete
-        </.link>
-      </:action>
-    </.table>
-  </div>
-</aside>
+    </div>
+    <div class="w-full h-full flex-grow p-3 overflow-auto">
+        <.header>
+          Welcome to Discordia
+          <:subtitle>
+            Feel free to create your own servers, or join a server to chat with like minded people!
+          </:subtitle>
+        </.header>
 
-<.header>
-  Welcome to Discordia
-  <:subtitle>
-    Feel free to create your own servers, or join a server to chat with like minded people!
-  </:subtitle>
-</.header>
+        <div class="mt-6">
+          <hr />
 
-<div class="mt-6">
-  <hr />
-
-  <h2 class="text-lg font-semibold mt-4">Discordia News!</h2>
-  <h4 class="text-base">
-    New updates coming soon!
-  </h4>
-  <p class="m-3">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis optio nobis voluptas? Fugit maiores repellat aut commodi in. Nobis officiis blanditiis sequi iste molestias pariatur ut nam corrupti provident distinctio consequatur iure enim praesentium necessitatibus aliquid, numquam exercitationem error fuga tempora, voluptatum omnis eveniet harum fugit aut? Tempore, ea. Nisi.
-  </p>
-  <p class="m-3">
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum similique mollitia voluptas deserunt autem debitis repudiandae nulla, id harum distinctio numquam quod quibusdam. Dolorem ex iste accusantium doloribus culpa tempore fugiat commodi expedita, doloremque sed facere magni et totam unde ipsa fugit repudiandae eos quo cupiditate. Aliquid vero debitis recusandae!
-  </p>
-  <p class="m-3">
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum similique mollitia voluptas deserunt autem debitis repudiandae nulla, id harum distinctio numquam quod quibusdam. Dolorem ex iste accusantium doloribus culpa tempore fugiat commodi expedita, doloremque sed facere magni et totam unde ipsa fugit repudiandae eos quo cupiditate. Aliquid vero debitis recusandae!
-  </p>
-  <p class="m-3">
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum similique mollitia voluptas deserunt autem debitis repudiandae nulla, id harum distinctio numquam quod quibusdam. Dolorem ex iste accusantium doloribus culpa tempore fugiat commodi expedita, doloremque sed facere magni et totam unde ipsa fugit repudiandae eos quo cupiditate. Aliquid vero debitis recusandae!
-  </p>
-  <p class="m-3">
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum similique mollitia voluptas deserunt autem debitis repudiandae nulla, id harum distinctio numquam quod quibusdam. Dolorem ex iste accusantium doloribus culpa tempore fugiat commodi expedita, doloremque sed facere magni et totam unde ipsa fugit repudiandae eos quo cupiditate. Aliquid vero debitis recusandae!
-  </p>
+          <h2 class="text-lg font-semibold mt-4">Discordia News!</h2>
+          <h4 class="text-base">
+            New updates coming soon!
+          </h4>
+          <p class="m-3">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis optio nobis voluptas? Fugit maiores repellat aut commodi in. Nobis officiis blanditiis sequi iste molestias pariatur ut nam corrupti provident distinctio consequatur iure enim praesentium necessitatibus aliquid, numquam exercitationem error fuga tempora, voluptatum omnis eveniet harum fugit aut? Tempore, ea. Nisi.
+          </p>
+          <p class="m-3">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum similique mollitia voluptas deserunt autem debitis repudiandae nulla, id harum distinctio numquam quod quibusdam. Dolorem ex iste accusantium doloribus culpa tempore fugiat commodi expedita, doloremque sed facere magni et totam unde ipsa fugit repudiandae eos quo cupiditate. Aliquid vero debitis recusandae!
+          </p>
+          <p class="m-3">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum similique mollitia voluptas deserunt autem debitis repudiandae nulla, id harum distinctio numquam quod quibusdam. Dolorem ex iste accusantium doloribus culpa tempore fugiat commodi expedita, doloremque sed facere magni et totam unde ipsa fugit repudiandae eos quo cupiditate. Aliquid vero debitis recusandae!
+          </p>
+          <p class="m-3">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum similique mollitia voluptas deserunt autem debitis repudiandae nulla, id harum distinctio numquam quod quibusdam. Dolorem ex iste accusantium doloribus culpa tempore fugiat commodi expedita, doloremque sed facere magni et totam unde ipsa fugit repudiandae eos quo cupiditate. Aliquid vero debitis recusandae!
+          </p>
+          <p class="m-3">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum similique mollitia voluptas deserunt autem debitis repudiandae nulla, id harum distinctio numquam quod quibusdam. Dolorem ex iste accusantium doloribus culpa tempore fugiat commodi expedita, doloremque sed facere magni et totam unde ipsa fugit repudiandae eos quo cupiditate. Aliquid vero debitis recusandae!
+          </p>
+        </div>
+    </div>
 </div>
+
 <.modal
   :if={@live_action in [:new, :edit]}
   id="server-modal"
